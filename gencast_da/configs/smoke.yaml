@@ -1,0 +1,13 @@
+kind: smoke
+config_id: gencast.smoke.cada
+stage: smoke
+module: gencast_da.smoke_cada
+data_root: ${GENCAST_DATA_ROOT}
+parameters:
+  seed: 0
+  num-noise-levels: 4
+seeds:
+  model: 0
+  observation: 0
+notes:
+  - One bounded zero-init, diagnostic, and gradient-flow smoke check.

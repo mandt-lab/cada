@@ -1,0 +1,168 @@
+kind: evaluation
+config_id: evaluation.era5_small.ms_8.h60
+dataset:
+  kind: dataset
+  config_id: dataset.era5_small
+  domain: era5_small
+  physical_channels: 3
+  channel_names:
+  - temperature
+  - u_wind
+  - v_wind
+  resolution:
+  - 64
+  - 64
+  physical_dt: 6.0
+  physical_dt_unit: hours
+  prior_sequence_length: 64
+  maximum_evaluation_horizon: 60
+  train_data_path: ${CADA_ROOT}/data/era5_small/train.h5
+  holdout_data_path: ${CADA_ROOT}/data/era5_small/holdout.h5
+  hdf5_key: x
+  data_sha256: null
+  train_split: train
+  holdout_split: holdout
+  train_years:
+  - 2006
+  - 2007
+  - 2008
+  - 2009
+  - 2010
+  - 2011
+  - 2012
+  - 2013
+  - 2014
+  - 2015
+  holdout_years:
+  - 2016
+  normalization:
+    method: channelwise_minmax
+    fit_split: years_2006_2015
+    statistics_path: ${CADA_ROOT}/data/era5_small/normalization.pt
+    applied_domain: model_input
+  source_citation: ERA5 reanalysis, 500 hPa; Paper Appendix F
+  source_version: null
+  source_provenance:
+    paper_reference: Paper Appendix F
+    paper_fields:
+    - physical_channels
+    - channel_names
+    - resolution
+    - physical_dt
+    - physical_dt_unit
+    - prior_sequence_length
+    - maximum_evaluation_horizon
+    - train_years
+    - holdout_years
+    - normalization.method
+    - normalization.fit_split
+    - source_citation
+    repository_default_fields:
+    - train_data_path
+    - holdout_data_path
+    - hdf5_key
+    - train_split
+    - holdout_split
+    - normalization.statistics_path
+    unresolved_fields:
+    - data_sha256
+    - source_version
+    notes:
+    - ERA5 request, patch bounds, and checksum follow the repository data pipeline.
+prior_model:
+  role: prior
+  architecture: unet
+  spatial_dims: 2
+  physical_channels: 3
+  base_width: 64
+  channel_multipliers:
+  - 1
+  - 2
+  - 4
+  - 8
+  learned_sinusoidal_embedding_dim: 128
+  objective: pred_v
+  beta_schedule: sigmoid
+  train_diffusion_steps: 1000
+  sampler: ddim
+  sampling_steps: 3
+prior_checkpoint_path: ${CADA_ROOT}/runs/era5_small/prior/paper/checkpoints/final.pt
+controller_config_id: controller.era5_small.ms_8
+controller_model:
+  architecture: film_controlnet
+  hidden_width: 768
+  group_norm_groups: 8
+controller_checkpoint_path: ${CADA_ROOT}/runs/era5_small/controller/ms_8/checkpoints/final.pt
+gamma: 0.1
+beta: 0.01
+intermediate_weight: 1.0
+evaluation_trajectories: 8
+observation:
+  family: ms
+  spatial_operator: regular_grid_mask
+  spatial_factor: 8
+  temporal_cadence_steps: 4
+  arrival_offsets:
+  - 4
+  - 8
+  - 12
+  - 16
+  mask_phase:
+  - 0
+  - 0
+  alignment: lower_index_origin
+  pooling: not_applicable
+  lifting: not_applicable
+  observation_noise_std: 0.0
+preview_length: 16
+horizon:
+  forecast_steps: 60
+  semantics: predicted_states_excluding_initial_state
+  final_chunk: shorten_to_remaining_steps
+seeds:
+  training: 0
+  data_order: 1
+  diffusion: 2
+  observation: 3
+metrics:
+  rmse_variable: all_channels
+  rmse_domain: normalized_model_space
+  physics_diagnostic: derived_vorticity
+  physics_domain: physical_space
+  high_correlation_time: false
+  correlation_threshold: null
+  aggregation: equal_channel_per_trajectory_then_time_average_then_ensemble_mean
+source_provenance:
+  paper_reference: Paper Section 4, Appendices F/H, and Algorithm 4
+  paper_fields:
+  - controller_model.*
+  - gamma
+  - beta
+  - observation.family
+  - observation.spatial_operator
+  - observation.spatial_factor
+  - observation.temporal_cadence_steps
+  - observation.arrival_offsets
+  - preview_length
+  - horizon.forecast_steps
+  - horizon.semantics
+  - horizon.final_chunk
+  - metrics.rmse_variable
+  - metrics.physics_diagnostic
+  - metrics.high_correlation_time
+  - metrics.correlation_threshold
+  repository_default_fields:
+  - observation.mask_phase
+  - observation.alignment
+  - seeds.*
+  - prior_checkpoint_path
+  - controller_checkpoint_path
+  - intermediate_weight
+  - evaluation_trajectories
+  - metrics.rmse_domain
+  - metrics.physics_domain
+  - metrics.aggregation
+  unresolved_fields: []
+  notes:
+  - Seeds, metric aggregation order, and reporting units are repository settings.
+  - Horizon counts forecast states and excludes the supplied initial state.

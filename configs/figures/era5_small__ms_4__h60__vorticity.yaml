@@ -1,0 +1,36 @@
+figure_type: snapshot_grid_2d
+artifact: ${CADA_ROOT}/publication/artifacts/era5_small/ms_4/h60/evaluation.npz
+output: ${CADA_ROOT}/publication/figures/era5_small__ms_4__h60__vorticity.png
+trajectory: 0
+timesteps: [4, 15, 28, 39, 52, 60]
+config_ids:
+  - evaluation.era5_small.ms_4.h60
+checkpoint_ids:
+  - prior.era5_small.paper
+  - controller.era5_small.ms_4
+seeds: [2]
+observation_details:
+  family: ms
+  spatial_factor: 4
+  temporal_cadence_steps: 4
+  notes:
+    - "Trajectory 0 with the listed mixed arrival and non-arrival timesteps."
+rendering:
+  field: era5_vorticity
+  u_channel: 1
+  v_channel: 2
+  dx: 0.9523809523809523
+  dy: 0.47619047619047616
+  periodic_longitude: false
+  periodic_latitude: false
+  layout: methods_as_columns
+  cmap: coolwarm
+  symmetric: true
+  dpi: 300
+  title: "ERA5 500 hPa vorticity, MS-4"
+  labels:
+    truth: GT
+    uncontrolled: Unguided ARDM
+    controlled: CADA
+  notes:
+    - "Shared symmetric color limits are inferred from the selected panels."

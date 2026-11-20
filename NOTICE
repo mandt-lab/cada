@@ -1,0 +1,13 @@
+CADA research code
+
+Portions of the diffusion-model implementation are adapted from
+lucidrains/denoising-diffusion-pytorch:
+https://github.com/lucidrains/denoising-diffusion-pytorch
+Prototype base commit: 1d9d8dffb72e02172da8a77bee039b1c72b7c6d5
+
+Copyright (c) 2020 Phil Wang
+Licensed under the MIT License reproduced in LICENSE.
+
+The CADA-specific code, configurations, and documentation are adaptations and
+new project work. They must not be attributed to Phil Wang or presented as part
+of the upstream denoising-diffusion-pytorch project.

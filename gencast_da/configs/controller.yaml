@@ -1,0 +1,36 @@
+kind: controller
+config_id: gencast.controller.mini
+stage: controller
+module: gencast_da.train_cada_controller
+data_root: ${GENCAST_DATA_ROOT}
+parameters:
+  num-steps: 40
+  num-noise-levels: 4
+  rollout-K: 1
+  rollout-loss-mode: mean
+  learning-rate: 0.0001
+  weight-decay: 0.0001
+  grad-clip: 1.0
+  gamma: 1.0
+  hidden-channels: 32
+  num-blocks: 3
+  sigma-emb-dim: 64
+  obs-lat-stride-deg: 4
+  obs-lon-stride-deg: 4
+  obs-mask-mode: stride
+  w-t: 1.0
+  w-full: 1.0
+  w-obs: 1.0
+  w-s: 0.0
+  w-c: 0.0
+  w-reg: 0.0001
+  log-every: 1
+  val-every: 10
+  save-every: 20
+  seed: 0
+seeds:
+  training: 0
+  observation: 11
+  diffusion: 0
+notes:
+  - Frozen GenCast Mini with a trainable Haiku CADA controller.

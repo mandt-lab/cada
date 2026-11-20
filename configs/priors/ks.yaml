@@ -1,0 +1,107 @@
+kind: prior
+config_id: prior.ks
+dataset:
+  kind: dataset
+  config_id: dataset.ks
+  domain: ks
+  physical_channels: 1
+  channel_names:
+  - u
+  resolution:
+  - 256
+  physical_dt: 0.2
+  physical_dt_unit: simulator_time
+  prior_sequence_length: 140
+  maximum_evaluation_horizon: 640
+  train_data_path: ${CADA_ROOT}/data/ks/train.h5
+  holdout_data_path: ${CADA_ROOT}/data/ks/holdout.h5
+  hdf5_key: null
+  data_sha256: null
+  train_split: train
+  holdout_split: test
+  train_years: []
+  holdout_years: []
+  normalization:
+    method: channelwise_minmax
+    fit_split: paper_train
+    statistics_path: ${CADA_ROOT}/data/ks/normalization.json
+    applied_domain: model_input
+  source_citation: Shysheya et al. [47]; Brandstetter et al. [56]
+  source_version: null
+  source_provenance:
+    paper_reference: Paper Appendix F
+    paper_fields:
+    - physical_channels
+    - channel_names
+    - resolution
+    - physical_dt
+    - physical_dt_unit
+    - prior_sequence_length
+    - maximum_evaluation_horizon
+    - source_citation
+    repository_default_fields:
+    - train_data_path
+    - holdout_data_path
+    - hdf5_key
+    - train_split
+    - holdout_split
+    - normalization.*
+    unresolved_fields:
+    - data_sha256
+    - source_version
+    notes:
+    - Split files, checksums, and PDE normalization follow the repository data pipeline.
+model:
+  role: prior
+  architecture: unet
+  spatial_dims: 1
+  physical_channels: 1
+  base_width: 64
+  channel_multipliers:
+  - 1
+  - 2
+  - 4
+  - 8
+  learned_sinusoidal_embedding_dim: 128
+  objective: pred_v
+  beta_schedule: sigmoid
+  train_diffusion_steps: 1000
+  sampler: ddim
+  sampling_steps: 3
+optimizer:
+  name: adam
+  learning_rate: 0.00032
+  weight_decay: 0.0
+  schedule: constant
+batch_size: 32
+train_steps: 1000000
+gradient_accumulation_steps: 1
+precision: fp16
+ema_decay: 0.995
+ema_update_every: 10
+seeds:
+  training: 0
+  data_order: 1
+  diffusion: 2
+  observation: 3
+checkpoint_path: ${CADA_ROOT}/runs/ks/prior/paper/checkpoints/final.pt
+source_provenance:
+  paper_reference: Paper Appendix G
+  paper_fields:
+  - model.*
+  - optimizer.learning_rate
+  - batch_size
+  - train_steps
+  - gradient_accumulation_steps
+  - precision
+  - ema_decay
+  - ema_update_every
+  repository_default_fields:
+  - optimizer.name
+  - optimizer.weight_decay
+  - optimizer.schedule
+  - seeds.*
+  - checkpoint_path
+  unresolved_fields: []
+  notes:
+  - Optimizer family, weight decay, and schedule are repository settings.

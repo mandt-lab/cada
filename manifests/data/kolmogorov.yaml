@@ -1,0 +1,54 @@
+kind: dataset
+config_id: dataset.kolmogorov
+domain: kolmogorov
+physical_channels: 2
+channel_names:
+- qx
+- qy
+resolution:
+- 64
+- 64
+physical_dt: 0.2
+physical_dt_unit: simulator_time
+prior_sequence_length: 64
+maximum_evaluation_horizon: 180
+train_data_path: ${CADA_ROOT}/data/kolmogorov/train.h5
+holdout_data_path: ${CADA_ROOT}/data/kolmogorov/holdout.h5
+hdf5_key: x
+data_sha256: null
+train_split: train
+holdout_split: holdout
+train_years: []
+holdout_years: []
+normalization:
+  method: channelwise_minmax
+  fit_split: paper_train
+  statistics_path: ${CADA_ROOT}/data/kolmogorov/normalization.pt
+  applied_domain: model_input
+source_citation: Shysheya et al. [47]; Rozet and Louppe [23]
+source_version: null
+source_provenance:
+  paper_reference: Paper Appendix F
+  paper_fields:
+  - physical_channels
+  - channel_names
+  - resolution
+  - physical_dt
+  - physical_dt_unit
+  - prior_sequence_length
+  - maximum_evaluation_horizon
+  - source_citation
+  repository_default_fields:
+  - train_data_path
+  - holdout_data_path
+  - hdf5_key
+  - train_split
+  - holdout_split
+  - normalization.*
+  unresolved_fields:
+  - data_sha256
+  - source_version
+  notes:
+  - Split files, checksums, and PDE normalization follow the repository data pipeline.
+  - The canonical training path uses the regular 64-state training set (819 trajectories).
+  - The canonical holdout path uses data_long/test.h5 with 192 states, supporting 180 forecast steps.

@@ -1,0 +1,10 @@
+kind: data
+config_id: gencast.data.mini
+stage: data
+module: gencast_da.data_contract
+data_root: ${GENCAST_DATA_ROOT}
+parameters: {}
+seeds:
+  data: 0
+notes:
+  - GenCast Mini 1-degree checkpoint, statistics, and ERA5 contract.

@@ -1,0 +1,37 @@
+kind: controller
+config_id: gencast.controller.ms16
+stage: controller
+module: gencast_da.train_cada_controller
+data_root: ${GENCAST_DATA_ROOT}
+parameters:
+  num-steps: 1000
+  num-noise-levels: 4
+  rollout-K: 4
+  rollout-loss-mode: mean
+  learning-rate: 0.0002
+  weight-decay: 0.0001
+  grad-clip: 1.0
+  gamma: 1.0
+  hidden-channels: 128
+  num-blocks: 8
+  sigma-emb-dim: 128
+  obs-lat-stride-deg: 16
+  obs-lon-stride-deg: 16
+  obs-mask-mode: stride
+  w-t: 1.0
+  w-full: 0.5
+  w-obs: 5.0
+  w-s: 0.0
+  w-c: 0.0
+  w-reg: 0.0
+  log-every: 1
+  val-every: 140
+  save-every: 20
+  seed: 0
+seeds:
+  training: 0
+  observation: 11
+  diffusion: 0
+notes:
+  - GenCast Mini CADA training with a regular 16-degree observation grid.
+  - Full training run with a four-step autoregressive rollout loss.

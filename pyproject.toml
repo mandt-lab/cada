@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cada-da"
+version = "0.1.0"
+description = "Research code for Learning to Assimilate: Amortized Control for Autoregressive Diffusion"
+readme = "README.md"
+requires-python = ">=3.10,<3.11"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Prakhar Srivastava" },
+  { name = "Farrin Marouf Sofian" },
+  { name = "Francesco Immorlano" },
+  { name = "Kushagra Pandey" },
+  { name = "Stephan Mandt" },
+]
+dependencies = [
+  "einops",
+  "h5py",
+  "matplotlib",
+  "numpy",
+  "PyYAML",
+  "scipy",
+  "torch>=2.7,<2.8",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.optional-dependencies]
+tracking = ["wandb"]
+era5 = ["netCDF4", "xarray"]
+dev = ["pytest", "ruff", "xarray"]
+
+[project.scripts]
+cada = "cada.cli:main"
+
+[project.urls]
+Paper = "https://arxiv.org/abs/2510.06637"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+src = ["src", "gencast_da"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

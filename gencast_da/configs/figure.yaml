@@ -1,0 +1,13 @@
+kind: figure
+config_id: gencast.figure.temperature
+stage: figure
+module: gencast_da.plot_cada_temperature
+data_root: ${GENCAST_DATA_ROOT}
+parameters:
+  artifact: ${CADA_ROOT}/artifacts/gencast/evaluation.npz
+  level-idx: 6
+  dpi: 150
+seeds:
+  rendering: 0
+notes:
+  - Renders truth, CADA prediction, and absolute temperature error only.

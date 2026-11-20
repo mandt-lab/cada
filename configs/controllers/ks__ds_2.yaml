@@ -1,0 +1,194 @@
+kind: controller
+config_id: controller.ks.ds_2
+dataset:
+  kind: dataset
+  config_id: dataset.ks
+  domain: ks
+  physical_channels: 1
+  channel_names:
+  - u
+  resolution:
+  - 256
+  physical_dt: 0.2
+  physical_dt_unit: simulator_time
+  prior_sequence_length: 140
+  maximum_evaluation_horizon: 640
+  train_data_path: ${CADA_ROOT}/data/ks/train.h5
+  holdout_data_path: ${CADA_ROOT}/data/ks/holdout.h5
+  hdf5_key: null
+  data_sha256: null
+  train_split: train
+  holdout_split: test
+  train_years: []
+  holdout_years: []
+  normalization:
+    method: channelwise_minmax
+    fit_split: paper_train
+    statistics_path: ${CADA_ROOT}/data/ks/normalization.json
+    applied_domain: model_input
+  source_citation: Shysheya et al. [47]; Brandstetter et al. [56]
+  source_version: null
+  source_provenance:
+    paper_reference: Paper Appendix F
+    paper_fields:
+    - physical_channels
+    - channel_names
+    - resolution
+    - physical_dt
+    - physical_dt_unit
+    - prior_sequence_length
+    - maximum_evaluation_horizon
+    - source_citation
+    repository_default_fields:
+    - train_data_path
+    - holdout_data_path
+    - hdf5_key
+    - train_split
+    - holdout_split
+    - normalization.*
+    unresolved_fields:
+    - data_sha256
+    - source_version
+    notes:
+    - Split files, checksums, and PDE normalization follow the repository data pipeline.
+prior_config_id: prior.ks
+prior_checkpoint_path: ${CADA_ROOT}/runs/ks/prior/paper/checkpoints/final.pt
+prior_model:
+  role: prior
+  architecture: unet
+  spatial_dims: 1
+  physical_channels: 1
+  base_width: 64
+  channel_multipliers:
+  - 1
+  - 2
+  - 4
+  - 8
+  learned_sinusoidal_embedding_dim: 128
+  objective: pred_v
+  beta_schedule: sigmoid
+  train_diffusion_steps: 1000
+  sampler: ddim
+  sampling_steps: 3
+controller_model:
+  architecture: film_controlnet
+  hidden_width: 768
+  group_norm_groups: 8
+optimizer:
+  name: adam
+  learning_rate: 5.0e-05
+  weight_decay: 0.0
+  schedule: constant
+batch_size: 8
+train_steps: 100000
+gradient_accumulation_steps: 1
+precision: fp16
+max_grad_norm: 1.0
+intermediate_weight: 1.0
+preview_length: 54
+gamma: 0.1
+beta: 0.01
+observation:
+  family: ds
+  spatial_operator: average_pool_lift
+  spatial_factor: 2
+  temporal_cadence_steps: 1
+  arrival_offsets:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+  - 21
+  - 22
+  - 23
+  - 24
+  - 25
+  - 26
+  - 27
+  - 28
+  - 29
+  - 30
+  - 31
+  - 32
+  - 33
+  - 34
+  - 35
+  - 36
+  - 37
+  - 38
+  - 39
+  - 40
+  - 41
+  - 42
+  - 43
+  - 44
+  - 45
+  - 46
+  - 47
+  - 48
+  - 49
+  - 50
+  - 51
+  - 52
+  - 53
+  - 54
+  mask_phase: []
+  alignment: lower_index_origin
+  pooling: average
+  lifting: nearest
+  observation_noise_std: 0.0
+seeds:
+  training: 0
+  data_order: 1
+  diffusion: 2
+  observation: 3
+checkpoint_path: ${CADA_ROOT}/runs/ks/controller/ds_2/checkpoints/final.pt
+source_provenance:
+  paper_reference: Paper Sections 2.3-2.4, Section 4, and Appendices A/C/D/H
+  paper_fields:
+  - prior_model.*
+  - controller_model.*
+  - preview_length
+  - gamma
+  - observation.family
+  - observation.spatial_operator
+  - observation.spatial_factor
+  - observation.temporal_cadence_steps
+  - observation.arrival_offsets
+  - observation.pooling
+  - observation.lifting
+  - observation.observation_noise_std
+  repository_default_fields:
+  - optimizer.*
+  - batch_size
+  - train_steps
+  - gradient_accumulation_steps
+  - precision
+  - max_grad_norm
+  - intermediate_weight
+  - beta
+  - observation.mask_phase
+  - observation.alignment
+  - seeds.*
+  - prior_checkpoint_path
+  - checkpoint_path
+  unresolved_fields: []
+  notes:
+  - Controller optimizer, batch size, and training duration are repository settings.
+  - Mask phase and grid/block alignment are explicit repository conventions.

@@ -1,0 +1,20 @@
+kind: evaluation
+config_id: gencast.evaluation.mini
+stage: evaluation
+module: gencast_da.run_cada_gencast
+data_root: ${GENCAST_DATA_ROOT}
+parameters:
+  ckpt: zero_init
+  steps: 4
+  seed: 0
+  num-noise-levels: 4
+  dataset: source-era5_date-2019-03-29_res-1.0_levels-13_steps-30.nc
+  obs-lat-stride-deg: 4
+  obs-lon-stride-deg: 4
+  obs-mask-mode: stride
+  random-mask-seed: 0
+seeds:
+  observation: 5
+  diffusion: 0
+notes:
+  - Override --checkpoint with a trained controller for non-smoke evaluation.
